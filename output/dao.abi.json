@@ -1,0 +1,412 @@
+{
+    "buildInfo": {
+        "rustc": {
+            "version": "1.65.0-nightly",
+            "commitHash": "02654a0844f5c8d29bac318c3c6c666da3d8543d",
+            "commitDate": "2022-08-30",
+            "channel": "Nightly",
+            "short": "rustc 1.65.0-nightly (02654a084 2022-08-30)"
+        },
+        "contractCrate": {
+            "name": "dao",
+            "version": "0.0.0"
+        },
+        "framework": {
+            "name": "elrond-wasm",
+            "version": "0.34.1"
+        }
+    },
+    "name": "Dao",
+    "constructor": {
+        "inputs": [
+            {
+                "name": "seconds",
+                "type": "u64"
+            },
+            {
+                "name": "token_id",
+                "type": "EgldOrEsdtTokenIdentifier"
+            },
+            {
+                "name": "cost_vote",
+                "type": "BigUint"
+            },
+            {
+                "name": "cost_proposals",
+                "type": "BigUint"
+            }
+        ],
+        "outputs": []
+    },
+    "endpoints": [
+        {
+            "name": "createProposal",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "proposal_content",
+                    "type": "bytes"
+                },
+                {
+                    "name": "opt",
+                    "type": "variadic<bytes>",
+                    "multi_arg": true
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bytes"
+                }
+            ]
+        },
+        {
+            "name": "proposalActivate",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "proposalDelete",
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "voteProposal",
+            "mutability": "mutable",
+            "payableInTokens": [
+                "*"
+            ],
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                },
+                {
+                    "name": "vote",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "getProposalStructUser",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                },
+                {
+                    "name": "user",
+                    "type": "Address"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Proposal"
+                }
+            ]
+        },
+        {
+            "name": "getProposalStruct",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "Proposal"
+                }
+            ]
+        },
+        {
+            "name": "getProposalstart",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "getexpirationDate",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "getProposalState",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "getProposalActivate",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bool"
+                }
+            ]
+        },
+        {
+            "name": "getVoteCount",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                },
+                {
+                    "name": "vote",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u32"
+                }
+            ]
+        },
+        {
+            "name": "getVoteAddress",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<ProposalVote>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "getCreatedId",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "u32"
+                }
+            ]
+        },
+        {
+            "name": "proposalOptions",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                },
+                {
+                    "name": "proposal_option",
+                    "type": "u32"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "bytes"
+                }
+            ]
+        },
+        {
+            "name": "optionsID",
+            "mutability": "readonly",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": [
+                {
+                    "type": "variadic<u32>",
+                    "multi_result": true
+                }
+            ]
+        },
+        {
+            "name": "tokenID",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "EgldOrEsdtTokenIdentifier"
+                }
+            ]
+        },
+        {
+            "name": "costVote",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "costProposals",
+            "mutability": "readonly",
+            "inputs": [],
+            "outputs": [
+                {
+                    "type": "BigUint"
+                }
+            ]
+        },
+        {
+            "name": "changeToken",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "new_token_id",
+                    "type": "EgldOrEsdtTokenIdentifier"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "changeCostVote",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "new_cost_vote",
+                    "type": "BigUint"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "changeCostProposals",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "new_cost_vote",
+                    "type": "BigUint"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "setExpirationTime",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "seconds",
+                    "type": "u64"
+                }
+            ],
+            "outputs": []
+        },
+        {
+            "name": "proposalPush",
+            "onlyOwner": true,
+            "mutability": "mutable",
+            "inputs": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                }
+            ],
+            "outputs": []
+        }
+    ],
+    "events": [],
+    "hasCallback": false,
+    "types": {
+        "Proposal": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "proposal_id",
+                    "type": "bytes"
+                },
+                {
+                    "name": "proposal_creator",
+                    "type": "Address"
+                },
+                {
+                    "name": "proposal_content",
+                    "type": "bytes"
+                },
+                {
+                    "name": "creation_timestamp",
+                    "type": "u64"
+                }
+            ]
+        },
+        "ProposalVote": {
+            "type": "struct",
+            "fields": [
+                {
+                    "name": "user",
+                    "type": "Address"
+                },
+                {
+                    "name": "vote",
+                    "type": "bytes"
+                },
+                {
+                    "name": "vote_time",
+                    "type": "u64"
+                }
+            ]
+        }
+    }
+}

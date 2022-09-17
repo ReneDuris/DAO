@@ -1,0 +1,11 @@
+/home/rene/rust/dao/target/debug/deps/getrandom-93e2224d5971411a.rmeta: /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/lib.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error_impls.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util_libc.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/use_file.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/linux_android.rs
+
+/home/rene/rust/dao/target/debug/deps/getrandom-93e2224d5971411a.d: /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/lib.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error_impls.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util_libc.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/use_file.rs /home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/linux_android.rs
+
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/lib.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/error_impls.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/util_libc.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/use_file.rs:
+/home/rene/elrondsdk/vendor-rust/registry/src/github.com-1ecc6299db9ec823/getrandom-0.2.7/src/linux_android.rs:

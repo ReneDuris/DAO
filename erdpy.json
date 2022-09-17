@@ -1,0 +1,27 @@
+{
+    "configurations": {
+        "default": {
+            "proxy": "https://devnet-api.elrond.com",
+            "chainID": "D"
+        }
+    },
+    "contract":{
+        "deploy":{
+            "verbose": true,
+            "bytecode": "output/dao.wasm",
+            "recall-nonce": true,
+            "pem": "../wallet.pem",
+            "gas-limit": 90000000,
+            "arguments": [
+                "3000",
+                "str:DSUPER-9af8df",
+                "5000000000000000000",
+                "50000000000000000000"
+            ],
+            "send": true,
+            "outfile": "dao.json"
+        }
+     }
+}
+
+
