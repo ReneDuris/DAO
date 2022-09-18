@@ -2,7 +2,7 @@
 This Smart Contract can create Proposal with option voting up to 5 options/single voting(approve,reject). And users can vote on specific proposal with their vote.
 
 #### disclaimer: 
-- using this code is on your own risk. This code is meant to be used for inspirational pruposes
+- using this code is on your own risk. This code is meant to be used for inspirational purposes
 
 To interact with the Smart Contract, you would need to have:
 - python3.8 and upper
