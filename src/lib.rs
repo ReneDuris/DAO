@@ -120,8 +120,10 @@ pub trait Dao:
 
         }
         else{
-          let vote_num = vote.parse_as_u64().unwrap_or(0u64);
-          let vote_num_usize = vote_num as usize;
+           let mut data_buffer = [0u8; 10usize];
+           let bytes_array = vote.load_to_byte_array(&mut data_buffer);
+           let vote_num:u32 = (bytes_array[0] as char).to_digit(10).unwrap_or(0u32);
+           let vote_num_usize = vote_num as usize;
         
             require!(self.storage_options_id(&proposal_id).contains(&vote_num_usize) == true, "This option does not exist.");
         }
