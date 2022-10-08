@@ -2,6 +2,8 @@
 elrond_wasm::imports!();
 const APPROVE : &[u8] = "approve".as_bytes();
 const REJECT : &[u8] = "reject".as_bytes();
+const NORMAL : &[u8] = "normal".as_bytes();
+const OPTION : &[u8] = "option".as_bytes();
 pub mod storage;
 pub mod founders;
 #[elrond_wasm::contract]
@@ -10,10 +12,12 @@ pub trait Dao:
          +founders::Founders {
     #[init]
     fn init(&self,seconds: u64,token_id : EgldOrEsdtTokenIdentifier, cost_vote : BigUint,cost_proposals: BigUint) {
+        let owner = self.blockchain().get_caller();
         self.expiration_time().set(seconds);
         self.token_id().set(token_id);
         self.cost_vote().set(cost_vote);
         self.cost_proposals().set(cost_proposals);
+        self.owner_sc().set(owner);
     }
 
      //CREATING PROPOSAL
@@ -22,17 +26,7 @@ pub trait Dao:
          let proposal_creator = self.blockchain().get_caller();
          let creation_timestamp = self.blockchain().get_block_timestamp();
          let owner = self.blockchain().get_owner_address();
- 
          let proposal_id = self.create_hash();
-         use crate::storage::Proposal;
-         let proposal_struct = Proposal{
-             proposal_id : proposal_id.clone(),
-             proposal_creator : proposal_creator.clone(),
-             proposal_content,
-             creation_timestamp
-         };
-         self.proposal_struct_user(&proposal_id, &proposal_creator).set(&proposal_struct);
-         self.proposal_struct(&proposal_id).set(proposal_struct);
  
  if proposal_creator == owner {
      self.proposal_activated(&proposal_id).set(true);
@@ -47,11 +41,26 @@ pub trait Dao:
                  self.created_id(&proposal_id).update(|id| *id += 1usize);
                  let option_id = self.created_id(&proposal_id).get();
                  self.storage_options_id(&proposal_id).insert(option_id);
-                 self.proposal_options(&proposal_id,option_id).set(buffer);
+                 self.proposal_options(&proposal_id,&option_id).set(buffer);
              }
+                let proposal_type: ManagedBuffer;
              if self.storage_options_id(&proposal_id).is_empty() == false {
-             require!(self.storage_options_id(&proposal_id).len() >= 2usize && self.storage_options_id(&proposal_id).len() <= 5usize, "You have to set atleast 2 options.");
+                require!(self.storage_options_id(&proposal_id).len() >= 2usize && self.storage_options_id(&proposal_id).len() <= 5usize, "You have to set atleast 2 options.");
+                proposal_type = ManagedBuffer::new_from_bytes(OPTION);
              }
+             else{
+                proposal_type = ManagedBuffer::new_from_bytes(NORMAL);
+             }
+             use crate::storage::Proposal;
+             let proposal_struct = Proposal{
+                 proposal_id : proposal_id.clone(),
+                 proposal_type,
+                 proposal_creator : proposal_creator.clone(),
+                 proposal_content,
+                 creation_timestamp
+             };
+             self.proposal_struct_user(&proposal_id, &proposal_creator).set(&proposal_struct);
+             self.proposal_struct(&proposal_id).set(proposal_struct);
          Ok(proposal_id)
      
      }
@@ -119,16 +128,8 @@ pub trait Dao:
             require!(vote== approve || vote == reject, "Wrong vote format.");
 
         }
-        else{
-           let mut data_buffer = [0u8; 10usize];
-           let bytes_array = vote.load_to_byte_array(&mut data_buffer);
-           let vote_num:u32 = (bytes_array[0] as char).to_digit(10).unwrap_or(0u32);
-           let vote_num_usize = vote_num as usize;
-        
-            require!(self.storage_options_id(&proposal_id).contains(&vote_num_usize) == true, "This option does not exist.");
-        }
-        self.already_voted(&proposal_id.clone()).insert(caller.clone());
-        self.vote_count(proposal_id.clone(),vote.clone()).update(|vote| *vote += 1usize);
+        self.already_voted(&proposal_id).insert(caller.clone());
+        self.vote_count(&proposal_id,&vote).update(|vote| *vote += 1usize);
 
         use crate::storage::ProposalVote;
         let proposal_vote = ProposalVote{
@@ -136,7 +137,36 @@ pub trait Dao:
             vote,
             vote_time: current_timestamp
         };
-        self.vote_address(proposal_id).insert(proposal_vote);
+        self.vote_address(&proposal_id).insert(proposal_vote);
     }
     
+
+    #[payable("*")]
+    #[endpoint(voteOption)]
+    fn vote_on_option(&self,proposal_id:ManagedBuffer, vote: usize){
+        let caller = self.blockchain().get_caller();
+        let current_timestamp = self.blockchain().get_block_timestamp();
+        let (payment_token, payment_amount) = self.call_value().egld_or_single_fungible_esdt();
+
+        require!(payment_token == self.token_id().get(), "Wrong token sent");
+        require!(payment_amount == self.cost_vote().get(), "Sent amount is different from what actual cost is");
+        require!(self.proposal_struct(&proposal_id).is_empty() == false, "Proposal not found");
+        require!(self.proposal_pushed(&proposal_id).get() == true, "Not pushed to voting");
+        require!(self.already_voted(&proposal_id).contains(&caller) == false, "Already voted");
+        require!( self.storage_options_id(&proposal_id).contains(&vote), "This option does not exist");
+        let future_expiration = self.proposal_start(&proposal_id).get();
+
+        require!(current_timestamp < future_expiration, "Proposal ended");
+
+        self.already_voted(&proposal_id).insert(caller.clone());
+        self.vote_option_count(&proposal_id,&vote).update(|vote| *vote += 1usize);
+
+        use crate::storage::ProposalOptionVote;
+        let proposal_vote = ProposalOptionVote{
+            user: caller,
+            vote,
+            vote_time: current_timestamp
+        };
+        self.vote_option_address(&proposal_id).insert(proposal_vote);
+    }
 }
