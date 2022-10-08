@@ -182,14 +182,18 @@ pub struct ProposalVote<M: ManagedTypeApi> {
      fn proposal_delete(&self,proposal_id:ManagedBuffer){
      }
    ```
-  - voteProposal (voting to proposal)
+  - voteProposal (voting to proposal of normal proposal type)
    ```
      #[payable("*")]
      #[endpoint(voteProposal)]
      fn vote_on_proposal(&self,proposal_id:ManagedBuffer, vote: ManagedBuffer){
      }
    ```
- 
-   
-  
+ - voteOption (voting on proposal of option proposal type)
+  ```
+     #[payable("*")]
+     #[endpoint(voteOption)]
+     fn vote_on_proposal(&self,proposal_id:ManagedBuffer, vote: usize){
+     }
+   ```
 
