@@ -81,9 +81,7 @@ pub trait Dao:
         let proposal_creator = proposal.proposal_creator;
 
         require!(caller == proposal_creator, "You didnt created this proposal.");
-
-        if self.created_id(&proposal_id).is_empty() == false {
-        }
+              
         self.proposal_activated(&proposal_id).set(true);
     }
 //DELETE PROPOSAL
@@ -120,14 +118,12 @@ pub trait Dao:
         let future_expiration = self.proposal_start(&proposal_id).get();
 
         require!(current_timestamp < future_expiration, "Proposal ended");
-
-        if self.created_id(&proposal_id).is_empty() == true {
+              
           let approve = ManagedBuffer::new_from_bytes(APPROVE);
           let reject = ManagedBuffer::new_from_bytes(REJECT);
 
             require!(vote== approve || vote == reject, "Wrong vote format.");
 
-        }
         self.already_voted(&proposal_id).insert(caller.clone());
         self.vote_count(&proposal_id,&vote).update(|vote| *vote += 1usize);
 
