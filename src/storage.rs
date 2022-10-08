@@ -4,6 +4,7 @@ elrond_wasm::derive_imports!();
 #[derive(TypeAbi, TopEncode, TopDecode)]
 pub struct Proposal<M: ManagedTypeApi> {
     pub proposal_id: ManagedBuffer<M>,
+    pub proposal_type: ManagedBuffer<M>,
     pub proposal_creator: ManagedAddress<M>,
     pub proposal_content: ManagedBuffer<M>,
     pub creation_timestamp: u64
@@ -12,6 +13,13 @@ pub struct Proposal<M: ManagedTypeApi> {
 pub struct ProposalVote<M: ManagedTypeApi> {
     pub user: ManagedAddress<M>,
     pub vote: ManagedBuffer<M>,
+    pub vote_time: u64
+}
+
+#[derive(TypeAbi, TopEncode, TopDecode, NestedEncode,NestedDecode)]
+pub struct ProposalOptionVote<M: ManagedTypeApi> {
+    pub user: ManagedAddress<M>,
+    pub vote: usize,
     pub vote_time: u64
 }
 
@@ -51,11 +59,19 @@ pub trait Storage{
 //COUNTING VOTE FOR EACH TYPE AND STATE
     #[view(getVoteCount)]
     #[storage_mapper("voteCount")]
-    fn vote_count(&self,proposal_id: ManagedBuffer,vote:ManagedBuffer) -> SingleValueMapper<usize>;
+    fn vote_count(&self,proposal_id: &ManagedBuffer,vote: &ManagedBuffer) -> SingleValueMapper<usize>;
+
+    #[view(getVoteOptionCount)]
+    #[storage_mapper("voteOptionCount")]
+    fn vote_option_count(&self,proposal_id: &ManagedBuffer,vote: &usize) -> SingleValueMapper<usize>;
 //STORED VOTE ON SPECIFIC PROPOSAL
     #[view(getVoteAddress)]
     #[storage_mapper("voteAddress")]
-    fn vote_address(&self,proposal_id: ManagedBuffer) -> UnorderedSetMapper<ProposalVote<Self::Api>>;
+    fn vote_address(&self,proposal_id: &ManagedBuffer) -> UnorderedSetMapper<ProposalVote<Self::Api>>;
+
+    #[view(getVoteOptionAddress)]
+    #[storage_mapper("voteOptionAddress")]
+    fn vote_option_address(&self,proposal_id: &ManagedBuffer) -> UnorderedSetMapper<ProposalOptionVote<Self::Api>>;
 //STORED ALL ADDRESSES VOTED ON SPECIFIC PROPOSAL
     #[storage_mapper("alreadyVoted")]
     fn already_voted(&self,proposal_id: &ManagedBuffer) -> UnorderedSetMapper<ManagedAddress>;
@@ -66,7 +82,7 @@ pub trait Storage{
 //STORE OPTIONS INPUT STRING BY CREATOR OF PROPOSAL AND ID ASSIGNED
     #[view(proposalOptions)]
     #[storage_mapper("proposalOptions")]
-    fn proposal_options(&self,proposal_id: &ManagedBuffer,proposal_option: usize) -> SingleValueMapper<ManagedBuffer>;
+    fn proposal_options(&self,proposal_id: &ManagedBuffer,proposal_option: &usize) -> SingleValueMapper<ManagedBuffer>;
 //STORING ALL ID INTO SPECIFIC PROPOSAL
     #[view(optionsID)]
     #[storage_mapper("OptionsID")]
@@ -83,4 +99,8 @@ pub trait Storage{
     #[view(costProposals)]
     #[storage_mapper("costProposals")]
     fn cost_proposals(&self) -> SingleValueMapper<BigUint>;
+// OWNER OF SC
+    #[view(getOwner)]
+    #[storage_mapper("Owner")]
+    fn owner_sc(&self) -> SingleValueMapper<ManagedAddress>;
 }
